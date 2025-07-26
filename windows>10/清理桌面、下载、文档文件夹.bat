@@ -2,75 +2,75 @@
 setlocal EnableDelayedExpansion
 
 :: =============================================
-:: ×îÖÕ¿É¿¿°æÏµÍ³ÇåÀí½Å±¾
-:: ÐÞ¸´£º¹ÜÀíÔ±È¨ÏÞ¼ì²éÎÊÌâ
-:: ÐÂÔö£ºÇåÀí×ÊÔ´¹ÜÀíÆ÷¡°×î½üÊ¹ÓÃµÄÎÄ¼þ¡±
-:: ÐÂÔö£ºÇåÀíChromeä¯ÀÀÆ÷Ê¹ÓÃ¼ÇÂ¼
-:: ¸Ä½ø£º×Ô¶¯Ç¿ÖÆ¹Ø±ÕChromeÊµÏÖÈ«×Ô¶¯ÇåÀí
+:: æœ€ç»ˆå¯é ç‰ˆç³»ç»Ÿæ¸…ç†è„šæœ¬
+:: ä¿®å¤ï¼šç®¡ç†å‘˜æƒé™æ£€æŸ¥é—®é¢˜
+:: æ–°å¢žï¼šæ¸…ç†èµ„æºç®¡ç†å™¨â€œæœ€è¿‘ä½¿ç”¨çš„æ–‡ä»¶â€
+:: æ–°å¢žï¼šæ¸…ç†Chromeæµè§ˆå™¨ä½¿ç”¨è®°å½•
+:: æ”¹è¿›ï¼šè‡ªåŠ¨å¼ºåˆ¶å…³é—­Chromeå®žçŽ°å…¨è‡ªåŠ¨æ¸…ç†
 :: =============================================
 
-:: Ê¹ÓÃ¼òµ¥¿É¿¿µÄ·½·¨´´½¨ÈÕÖ¾ÎÄ¼þÃû
+:: ä½¿ç”¨ç®€å•å¯é çš„æ–¹æ³•åˆ›å»ºæ—¥å¿—æ–‡ä»¶å
 set "timestamp=%date:~0,4%%date:~5,2%%date:~8,2%_%time:~0,2%%time:~3,2%"
-set "timestamp=!timestamp: =0!"  REM Ìæ»»¿Õ¸ñÎª0
+set "timestamp=!timestamp: =0!"  REM æ›¿æ¢ç©ºæ ¼ä¸º0
 set "logFile=%TEMP%\SystemCleanup_%timestamp%.log"
 
-:: ³õÊ¼»¯ÈÕÖ¾
-echo [%time%] ÏµÍ³ÇåÀíÈÕÖ¾ - %date% > "%logFile%"
-echo [%time%] ½Å±¾Â·¾¶: %~f0 >> "%logFile%"
+:: åˆå§‹åŒ–æ—¥å¿—
+echo [%time%] ç³»ç»Ÿæ¸…ç†æ—¥å¿— - %date% > "%logFile%"
+echo [%time%] è„šæœ¬è·¯å¾„: %~f0 >> "%logFile%"
 
-:: ×î¿É¿¿µÄ¹ÜÀíÔ±È¨ÏÞ¼ì²é
+:: æœ€å¯é çš„ç®¡ç†å‘˜æƒé™æ£€æŸ¥
 fsutil dirty query %SystemDrive% >nul 2>&1
 if %errorlevel% neq 0 (
-    echo [%time%] ´íÎó£ºÐèÒª¹ÜÀíÔ±È¨ÏÞ >> "%logFile%"
+    echo [%time%] é”™è¯¯ï¼šéœ€è¦ç®¡ç†å‘˜æƒé™ >> "%logFile%"
     echo.
-    echo ´íÎó£ºÐèÒª¹ÜÀíÔ±È¨ÏÞÔËÐÐ´Ë½Å±¾
-    echo ÇëÓÒ¼üµ¥»÷´Ë½Å±¾£¬Ñ¡Ôñ"ÒÔ¹ÜÀíÔ±Éí·ÝÔËÐÐ"
+    echo é”™è¯¯ï¼šéœ€è¦ç®¡ç†å‘˜æƒé™è¿è¡Œæ­¤è„šæœ¬
+    echo è¯·å³é”®å•å‡»æ­¤è„šæœ¬ï¼Œé€‰æ‹©"ä»¥ç®¡ç†å‘˜èº«ä»½è¿è¡Œ"
     echo.
     pause
     exit /b 1
 )
 
-echo [%time%] ÒÑ»ñÈ¡¹ÜÀíÔ±È¨ÏÞ >> "%logFile%"
-echo ÕýÔÚÖ´ÐÐÏµÍ³ÇåÀí£¬ÇëµÈ´ý´°¿Ú×Ô¶¯¹Ø±Õ......
+echo [%time%] å·²èŽ·å–ç®¡ç†å‘˜æƒé™ >> "%logFile%"
+echo æ­£åœ¨æ‰§è¡Œç³»ç»Ÿæ¸…ç†ï¼Œè¯·ç­‰å¾…çª—å£è‡ªåŠ¨å…³é—­......
 
-:: ÐÂÔö£ºÇ¿ÖÆ¹Ø±ÕChromeä¯ÀÀÆ÷
+:: æ–°å¢žï¼šå¼ºåˆ¶å…³é—­Chromeæµè§ˆå™¨
 call :CloseChrome
 
-:: ÇåÀíÏµÍ³ÁÙÊ±Ä¿Â¼ - É¾³ýËùÓÐÄÚÈÝ
+:: æ¸…ç†ç³»ç»Ÿä¸´æ—¶ç›®å½• - åˆ é™¤æ‰€æœ‰å†…å®¹
 if exist "%TEMP%\" call :CleanAll "%TEMP%"
 
-:: ÇåÀíÏÂÔØÄ¿Â¼ - É¾³ýËùÓÐÄÚÈÝ
+:: æ¸…ç†ä¸‹è½½ç›®å½• - åˆ é™¤æ‰€æœ‰å†…å®¹
 if exist "%USERPROFILE%\Downloads\" call :CleanAll "%USERPROFILE%\Downloads"
 
-:: ÇåÀíÎÄµµÄ¿Â¼ - É¾³ýËùÓÐÄÚÈÝ
+:: æ¸…ç†æ–‡æ¡£ç›®å½• - åˆ é™¤æ‰€æœ‰å†…å®¹
 if exist "%USERPROFILE%\Documents\" call :CleanAll "%USERPROFILE%\Documents"
 
-:: °²È«ÇåÀí×ÀÃæ£¨±£ÁôÏµÍ³ÎÄ¼þºÍ¿ì½Ý·½Ê½£¬µ«É¾³ýËùÓÐÎÄ¼þ¼Ð£©
+:: å®‰å…¨æ¸…ç†æ¡Œé¢ï¼ˆä¿ç•™ç³»ç»Ÿæ–‡ä»¶å’Œå¿«æ·æ–¹å¼ï¼Œä½†åˆ é™¤æ‰€æœ‰æ–‡ä»¶å¤¹ï¼‰
 set "desktopPath=%USERPROFILE%\Desktop"
 if exist "%desktopPath%\" (
-    echo [%time%] ÇåÀí×ÀÃæ: %desktopPath% >> "%logFile%"
+    echo [%time%] æ¸…ç†æ¡Œé¢: %desktopPath% >> "%logFile%"
     call :CleanDesktop "%desktopPath%"
 )
 
-:: ÔËÐÐ´ÅÅÌÇåÀí¹¤¾ß
+:: è¿è¡Œç£ç›˜æ¸…ç†å·¥å…·
 start /B /WAIT cleanmgr /sagerun:1 >nul 2>&1
 
-:: ÇåÀí»ØÊÕÕ¾
+:: æ¸…ç†å›žæ”¶ç«™
 PowerShell -Command "Clear-RecycleBin -Force -ErrorAction SilentlyContinue" 2>&1 >> "%logFile%"
 
-:: ÇåÀíWindowsÁÙÊ±Ä¿Â¼ - É¾³ýËùÓÐÄÚÈÝ
+:: æ¸…ç†Windowsä¸´æ—¶ç›®å½• - åˆ é™¤æ‰€æœ‰å†…å®¹
 if exist "%WINDIR%\Temp\" call :CleanAll "%WINDIR%\Temp"
 
-:: ÇåÀíÏµÍ³¸üÐÂ»º´æ
+:: æ¸…ç†ç³»ç»Ÿæ›´æ–°ç¼“å­˜
 net stop wuauserv >nul 2>&1
-if !errorlevel! equ 0 (  REM ÐÞ¸´£ºÌí¼ÓÁË if ºÍ !errorlevel! Ö®¼äµÄ¿Õ¸ñ
+if !errorlevel! equ 0 (  REM ä¿®å¤ï¼šæ·»åŠ äº† if å’Œ !errorlevel! ä¹‹é—´çš„ç©ºæ ¼
     if exist "%WINDIR%\SoftwareDistribution\Download\" (
         call :CleanAll "%WINDIR%\SoftwareDistribution\Download"
     )
     net start wuauserv >nul 2>&1
 )
 
-:: ÇåÀíPrefetchÎÄ¼þ£¨±£Áô×î½üµÄ3¸ö£©
+:: æ¸…ç†Prefetchæ–‡ä»¶ï¼ˆä¿ç•™æœ€è¿‘çš„3ä¸ªï¼‰
 if exist "%WINDIR%\Prefetch\" (
     cd /d "%WINDIR%\Prefetch\"
     for /f "skip=3 delims=" %%F in ('dir /a-d /b /o-d *.* 2^>nul') do (
@@ -78,132 +78,132 @@ if exist "%WINDIR%\Prefetch\" (
     )
 )
 
-:: ÐÂÔö£ºÇåÀí×ÊÔ´¹ÜÀíÆ÷¡°×î½üÊ¹ÓÃµÄÎÄ¼þ¡±¼ÇÂ¼
-echo [%time%] ÇåÀí×ÊÔ´¹ÜÀíÆ÷¡°×î½üÊ¹ÓÃµÄÎÄ¼þ¡±¼ÇÂ¼ >> "%logFile%"
+:: æ–°å¢žï¼šæ¸…ç†èµ„æºç®¡ç†å™¨â€œæœ€è¿‘ä½¿ç”¨çš„æ–‡ä»¶â€è®°å½•
+echo [%time%] æ¸…ç†èµ„æºç®¡ç†å™¨â€œæœ€è¿‘ä½¿ç”¨çš„æ–‡ä»¶â€è®°å½• >> "%logFile%"
 del /F /Q "%APPDATA%\Microsoft\Windows\Recent\*" >nul 2>&1
 del /F /Q "%APPDATA%\Microsoft\Windows\Recent\AutomaticDestinations\*" >nul 2>&1
 del /F /Q "%APPDATA%\Microsoft\Windows\Recent\CustomDestinations\*" >nul 2>&1
 
-:: ÐÂÔö£ºÇåÀíChromeä¯ÀÀÆ÷Ê¹ÓÃ¼ÇÂ¼
-echo [%time%] ÇåÀíChromeä¯ÀÀÆ÷Ê¹ÓÃ¼ÇÂ¼ >> "%logFile%"
+:: æ–°å¢žï¼šæ¸…ç†Chromeæµè§ˆå™¨ä½¿ç”¨è®°å½•
+echo [%time%] æ¸…ç†Chromeæµè§ˆå™¨ä½¿ç”¨è®°å½• >> "%logFile%"
 call :CleanChromeData
 
-:: Íê³ÉÌáÊ¾
-echo [%time%] ÏµÍ³ÇåÀíÍê³É£¡ >> "%logFile%"
+:: å®Œæˆæç¤º
+echo [%time%] ç³»ç»Ÿæ¸…ç†å®Œæˆï¼ >> "%logFile%"
 echo.
-echo ÏµÍ³ÇåÀíÍê³É£¡
-echo ÈÕÖ¾ÎÄ¼þÎ»ÖÃ: "%logFile%"
+echo ç³»ç»Ÿæ¸…ç†å®Œæˆï¼
+echo æ—¥å¿—æ–‡ä»¶ä½ç½®: "%logFile%"
 timeout /t 3 >nul
 exit /b
 
-:: ================== º¯Êý¶¨Òå ==================
+:: ================== å‡½æ•°å®šä¹‰ ==================
 
-:: ÍêÈ«ÇåÀíÄ¿Â¼£¨É¾³ýËùÓÐÄÚÈÝ£©
+:: å®Œå…¨æ¸…ç†ç›®å½•ï¼ˆåˆ é™¤æ‰€æœ‰å†…å®¹ï¼‰
 :CleanAll
 set "target=%~1"
 if not exist "%target%\" exit /b
 
-echo [%time%] ÍêÈ«ÇåÀíÄ¿Â¼: %target% >> "%logFile%"
+echo [%time%] å®Œå…¨æ¸…ç†ç›®å½•: %target% >> "%logFile%"
 
-:: É¾³ýËùÓÐÎÄ¼þ£¨°üÀ¨Òþ²ØºÍÏµÍ³ÎÄ¼þ£©
+:: åˆ é™¤æ‰€æœ‰æ–‡ä»¶ï¼ˆåŒ…æ‹¬éšè—å’Œç³»ç»Ÿæ–‡ä»¶ï¼‰
 del /f /q /a "%target%\*" >nul 2>&1
 
-:: É¾³ýËùÓÐ×ÓÄ¿Â¼£¨°üÀ¨Òþ²ØºÍÏµÍ³ÎÄ¼þ¼Ð£©
+:: åˆ é™¤æ‰€æœ‰å­ç›®å½•ï¼ˆåŒ…æ‹¬éšè—å’Œç³»ç»Ÿæ–‡ä»¶å¤¹ï¼‰
 for /d %%D in ("%target%\*") do (
     rd /s /q "%%D" >nul 2>&1 || (
-        echo [%time%] ¾¯¸æ£ºÎÞ·¨É¾³ýÎÄ¼þ¼Ð "%%D" >> "%logFile%"
+        echo [%time%] è­¦å‘Šï¼šæ— æ³•åˆ é™¤æ–‡ä»¶å¤¹ "%%D" >> "%logFile%"
     )
 )
 exit /b
 
-:: ×ÀÃæ×¨ÓÃÇåÀí£¨±£ÁôÏµÍ³ÎÄ¼þºÍ¿ì½Ý·½Ê½£¬É¾³ýËùÓÐÎÄ¼þ¼Ð£©
+:: æ¡Œé¢ä¸“ç”¨æ¸…ç†ï¼ˆä¿ç•™ç³»ç»Ÿæ–‡ä»¶å’Œå¿«æ·æ–¹å¼ï¼Œåˆ é™¤æ‰€æœ‰æ–‡ä»¶å¤¹ï¼‰
 :CleanDesktop
 set "deskPath=%~1"
 
-:: É¾³ý×ÀÃæËùÓÐÎÄ¼þ¼Ð£¨²»Çø·ÖÏµÍ³ÊôÐÔ£©
+:: åˆ é™¤æ¡Œé¢æ‰€æœ‰æ–‡ä»¶å¤¹ï¼ˆä¸åŒºåˆ†ç³»ç»Ÿå±žæ€§ï¼‰
 for /d %%D in ("%deskPath%\*") do (
     rd /s /q "%%D" >nul 2>&1 || (
-        echo [%time%] ¾¯¸æ£ºÎÞ·¨É¾³ý×ÀÃæÎÄ¼þ¼Ð "%%D" >> "%logFile%"
+        echo [%time%] è­¦å‘Šï¼šæ— æ³•åˆ é™¤æ¡Œé¢æ–‡ä»¶å¤¹ "%%D" >> "%logFile%"
     )
 )
 
-:: ÇåÀí×ÀÃæÎÄ¼þ£¨±£Áô¿ì½Ý·½Ê½ºÍÏµÍ³ÎÄ¼þ£©
+:: æ¸…ç†æ¡Œé¢æ–‡ä»¶ï¼ˆä¿ç•™å¿«æ·æ–¹å¼å’Œç³»ç»Ÿæ–‡ä»¶ï¼‰
 for %%F in ("%deskPath%\*") do (
      if /i not "%%~xF"==".lnk" if /i not "%%~xF"==".url" (
         attrib "%%F" | findstr /c:" S " >nul || (
             del /f /q "%%F" >nul 2>&1 || (
-                echo [%time%] ¾¯¸æ£ºÎÞ·¨É¾³ý×ÀÃæÎÄ¼þ "%%F" >> "%logFile%"
+                echo [%time%] è­¦å‘Šï¼šæ— æ³•åˆ é™¤æ¡Œé¢æ–‡ä»¶ "%%F" >> "%logFile%"
             )
         )
     )
 )
 exit /b
 
-:: ÐÂÔö£ºÇ¿ÖÆ¹Ø±ÕChromeä¯ÀÀÆ÷
+:: æ–°å¢žï¼šå¼ºåˆ¶å…³é—­Chromeæµè§ˆå™¨
 :CloseChrome
-echo [%time%] ÕýÔÚ¼ì²é²¢¹Ø±ÕChromeä¯ÀÀÆ÷... >> "%logFile%"
+echo [%time%] æ­£åœ¨æ£€æŸ¥å¹¶å…³é—­Chromeæµè§ˆå™¨... >> "%logFile%"
 
-:: ¼ì²éChromeÊÇ·ñÕýÔÚÔËÐÐ
+:: æ£€æŸ¥Chromeæ˜¯å¦æ­£åœ¨è¿è¡Œ
 tasklist /FI "IMAGENAME eq chrome.exe" 2>NUL | find /I /N "chrome.exe">NUL
 if "%ERRORLEVEL%"=="0" (
-    echo [%time%] ¼ì²âµ½ChromeÕýÔÚÔËÐÐ£¬³¢ÊÔ¹Ø±Õ... >> "%logFile%"
+    echo [%time%] æ£€æµ‹åˆ°Chromeæ­£åœ¨è¿è¡Œï¼Œå°è¯•å…³é—­... >> "%logFile%"
     
-    :: ³¢ÊÔÕý³£¹Ø±Õ
+    :: å°è¯•æ­£å¸¸å…³é—­
     taskkill /F /IM chrome.exe /T >nul 2>&1
     
-    :: ÑéÖ¤ÊÇ·ñÒÑ¹Ø±Õ
+    :: éªŒè¯æ˜¯å¦å·²å…³é—­
     timeout /t 2 >nul
     tasklist /FI "IMAGENAME eq chrome.exe" 2>NUL | find /I /N "chrome.exe">NUL
     if "%ERRORLEVEL%"=="0" (
-        echo [%time%] ¾¯¸æ£ºChromeÎ´Õý³£¹Ø±Õ£¬ÕýÔÚÇ¿ÖÆÖÕÖ¹... >> "%logFile%"
+        echo [%time%] è­¦å‘Šï¼šChromeæœªæ­£å¸¸å…³é—­ï¼Œæ­£åœ¨å¼ºåˆ¶ç»ˆæ­¢... >> "%logFile%"
         taskkill /F /IM chrome.exe /T >nul 2>&1
         
-        :: ÔÙ´ÎÑéÖ¤
+        :: å†æ¬¡éªŒè¯
         timeout /t 2 >nul
         tasklist /FI "IMAGENAME eq chrome.exe" 2>NUL | find /I /N "chrome.exe">NUL
         if "%ERRORLEVEL%"=="0" (
-            echo [%time%] ´íÎó£ºÎÞ·¨¹Ø±ÕChromeä¯ÀÀÆ÷£¬Ìø¹ýÇåÀíChromeÊý¾Ý >> "%logFile%"
+            echo [%time%] é”™è¯¯ï¼šæ— æ³•å…³é—­Chromeæµè§ˆå™¨ï¼Œè·³è¿‡æ¸…ç†Chromeæ•°æ® >> "%logFile%"
             exit /b 1
         ) else (
-            echo [%time%] ³É¹¦Ç¿ÖÆ¹Ø±ÕChromeä¯ÀÀÆ÷ >> "%logFile%"
+            echo [%time%] æˆåŠŸå¼ºåˆ¶å…³é—­Chromeæµè§ˆå™¨ >> "%logFile%"
         )
     ) else (
-        echo [%time%] ³É¹¦¹Ø±ÕChromeä¯ÀÀÆ÷ >> "%logFile%"
+        echo [%time%] æˆåŠŸå…³é—­Chromeæµè§ˆå™¨ >> "%logFile%"
     )
 ) else (
-    echo [%time%] Chromeä¯ÀÀÆ÷Î´ÔËÐÐ >> "%logFile%"
+    echo [%time%] Chromeæµè§ˆå™¨æœªè¿è¡Œ >> "%logFile%"
 )
 exit /b
 
-:: ÇåÀíChromeä¯ÀÀÆ÷Êý¾Ý
+:: æ¸…ç†Chromeæµè§ˆå™¨æ•°æ®
 :CleanChromeData
 set "chromeDataDir=%LOCALAPPDATA%\Google\Chrome\User Data\Default"
 
 if exist "%chromeDataDir%" (
-    echo [%time%] ÇåÀíChromeä¯ÀÀÆ÷Êý¾Ý: %chromeDataDir% >> "%logFile%"
+    echo [%time%] æ¸…ç†Chromeæµè§ˆå™¨æ•°æ®: %chromeDataDir% >> "%logFile%"
     
-    :: É¾³ýÀúÊ·¼ÇÂ¼
+    :: åˆ é™¤åŽ†å²è®°å½•
     if exist "%chromeDataDir%\History" del /f /q "%chromeDataDir%\History" >> "%logFile%" 2>&1
     
-    :: É¾³ý»º´æ
+    :: åˆ é™¤ç¼“å­˜
     if exist "%chromeDataDir%\Cache" call :CleanAll "%chromeDataDir%\Cache"
     
-    :: É¾³ýCookie
+    :: åˆ é™¤Cookie
     if exist "%chromeDataDir%\Cookies" del /f /q "%chromeDataDir%\Cookies" >> "%logFile%" 2>&1
     
-    :: É¾³ýÏÂÔØÀúÊ·
+    :: åˆ é™¤ä¸‹è½½åŽ†å²
     if exist "%chromeDataDir%\Download History" del /f /q "%chromeDataDir%\Download History" >> "%logFile%" 2>&1
     
-    :: É¾³ý±íµ¥Êý¾Ý
+    :: åˆ é™¤è¡¨å•æ•°æ®
     if exist "%chromeDataDir%\Web Data" del /f /q "%chromeDataDir%\Web Data" >> "%logFile%" 2>&1
     
-    :: É¾³ýÃÜÂë
+    :: åˆ é™¤å¯†ç 
     if exist "%chromeDataDir%\Login Data" del /f /q "%chromeDataDir%\Login Data" >> "%logFile%" 2>&1
     
-    :: É¾³ýä¯ÀÀÆ÷»á»°
+    :: åˆ é™¤æµè§ˆå™¨ä¼šè¯
     if exist "%chromeDataDir%\Session Storage" call :CleanAll "%chromeDataDir%\Session Storage"
     
-    :: É¾³ýÆäËûÁÙÊ±Êý¾Ý
+    :: åˆ é™¤å…¶ä»–ä¸´æ—¶æ•°æ®
     del /f /q "%chromeDataDir%\* Preferences" >> "%logFile%" 2>&1
     del /f /q "%chromeDataDir%\Top Sites" >> "%logFile%" 2>&1
     del /f /q "%chromeDataDir%\Visited Links" >> "%logFile%" 2>&1
