@@ -8,10 +8,11 @@
     文件名: Generate-NetworkConfigBATScripts.ps1
     版本: 1.4
    !重要
-    在powershell窗口先执行 
+   1. 在powershell窗口先执行 
     Set-ExecutionPolicy Bypass -Scope Process -Force 
     再运行此脚本
-    依赖powershell，在win10、win11测试可用。
+   2.win10的powershell对utf-8编码支持不好，若是使用直接下载的脚本，中文会乱码，建议使用记事本等工具转换为ansi或者gb18030等编码再运行。
+   3. 依赖powershell，在win10、win11测试可用。
 #>
 
 # 配置参数
@@ -142,4 +143,5 @@ pause
 }
 
 Write-Host "`n脚本生成完成，请以管理员身份运行生成的BAT文件" -ForegroundColor Green
+
 
