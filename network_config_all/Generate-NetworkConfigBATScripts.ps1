@@ -18,9 +18,9 @@
 # 配置参数
 $outputFolder = "C:\NetworkConfigBATScripts"
 $subnetMask = "255.255.255.0" #IPv4掩码
-$ipv6PrefixLength = "96"  # IPv6前缀
-$defaultGatewayIPv4 = "192.168.2.1"
-$defaultGatewayIPv6 = "FE80::D238"  # IPv6网关
+$ipv6PrefixLength = "112"  # IPv6前缀
+$defaultGatewayIPv4 = "192.168.4.1"
+$defaultGatewayIPv6 = "FE80::D23A"  # IPv6网关
 $dnsServersIPv4 = @("114.114.114.114", "192.168.6.6")  #IPv4 DNS
 $dnsServersIPv6 = @("2400:3200::1", "fd0a::6") #IPv6 DNS
 $testServer = "aliyun.com"  # 测试连通性的服务器
@@ -28,10 +28,10 @@ $testServer = "aliyun.com"  # 测试连通性的服务器
 # 定义PC列表，我自己使用excel生成IP信息粘贴过来运行；
 # 因为我的需求是ipv4和ipv6一一对应，且不具备可简单复用的规律，所以使用此方法。
 $pcList = @(
-    @{ IPv4 = "192.168.2.10"; IPv6 = "240E:638::1031:3" }
-    @{ IPv4 = "192.168.2.11"; IPv6 = "240E:638::1031:4" }
-    @{ IPv4 = "192.168.2.12"; IPv6 = "240E:638::1031:5" }
-    #根据自己的需求增加IP
+  @{ IPv4 = "192.168.4.10"; IPv6 = "2001::2:5" }
+@{ IPv4 = "192.168.4.11"; IPv6 = "2001::2:6" }
+excel公式：'@{ IPv4 = "&ipv4单元格& '"; IPv6 = "&ipv6单元格&'" }  因为双引号会被识别为公式，所以在每个单元格前面加个'符号，此处公式&旁边是一个单元格完整的内容
+
 )
 
 # 创建输出目录
@@ -94,7 +94,7 @@ IF %ERRORLEVEL% NEQ 0 (
 
 :: 配置IPv6网关（使用PowerShell）
 echo 正在配置IPv6网关: $defaultGatewayIPv6
-powershell -Command "$interface = Get-NetAdapter -Name '%interfaceName%' -ErrorAction SilentlyContinue; if ($interface) { try { Remove-NetRoute -DestinationPrefix '::/0' -InterfaceAlias $interface.Name -Confirm:`$false -ErrorAction SilentlyContinue; New-NetRoute -InterfaceAlias $interface.Name -DestinationPrefix '::/0' -NextHop '$defaultGatewayIPv6' -ErrorAction Stop; Write-Host 'IPv6网关配置成功!' -ForegroundColor Green } catch { Write-Host '配置失败: ' + `$_.Exception.Message -ForegroundColor Red } } else { Write-Host '未找到网卡: %interfaceName%!' -ForegroundColor Red }"
+powershell -Command "`$interface = Get-NetAdapter -Name '%interfaceName%' -ErrorAction SilentlyContinue; if (`$interface) { try { Remove-NetRoute -DestinationPrefix '::/0' -InterfaceAlias `$interface.Name -Confirm:`$false -ErrorAction SilentlyContinue; New-NetRoute -InterfaceAlias `$interface.Name -DestinationPrefix '::/0' -NextHop '$defaultGatewayIPv6' -ErrorAction Stop; Write-Host 'IPv6网关配置成功!' -ForegroundColor Green } catch { Write-Host '配置失败: ' + `$_.Exception.Message -ForegroundColor Red } } else { Write-Host '未找到网卡: %interfaceName%!' -ForegroundColor Red }"
 
 :: 配置DNS服务器
 echo 正在配置DNS服务器...
