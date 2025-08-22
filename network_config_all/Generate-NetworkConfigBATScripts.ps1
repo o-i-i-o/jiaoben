@@ -1,34 +1,39 @@
 <#
 .SYNOPSIS
-    Éú³ÉÅúÁ¿ÍøÂçÅäÖÃBAT½Å±¾£¨ANSI±àÂë£©
+    ç”Ÿæˆæ‰¹é‡ç½‘ç»œé…ç½®BATè„šæœ¬ï¼ˆANSIç¼–ç ï¼‰
 .DESCRIPTION
-    ´Ë½Å±¾»áÎª¶àÌ¨PCÉú³É¶ÀÁ¢µÄBATÍøÂçÅäÖÃ½Å±¾£¨Ê¹ÓÃANSI±àÂë£©£¬
-    Ã¿¸ö½Å±¾ÒÔIPv4µØÖ·ÃüÃû²¢ÅäÖÃÏàÓ¦µÄIPv4ºÍIPv6µØÖ·¡£
+    æ­¤è„šæœ¬ä¼šä¸ºå¤šå°PCç”Ÿæˆç‹¬ç«‹çš„BATç½‘ç»œé…ç½®è„šæœ¬ï¼ˆä½¿ç”¨ANSIç¼–ç ï¼‰ï¼Œ
+    æ¯ä¸ªè„šæœ¬ä»¥IPv4åœ°å€å‘½åå¹¶é…ç½®ç›¸åº”çš„IPv4å’ŒIPv6åœ°å€ã€‚
 .NOTES
-    ÎÄ¼şÃû: Generate-NetworkConfigBATScripts.ps1
-    °æ±¾: 1.4
-    ¸üĞÂ£ºÓëÖ¸¶¨µÄBAT½Å±¾Âß¼­ÍêÈ«Ò»ÖÂ
-    ÔÚpowershell´°¿ÚÏÈÖ´ĞĞ Set-ExecutionPolicy Bypass -Scope Process -Force ÔÙÔËĞĞ½Å±¾
+    æ–‡ä»¶å: Generate-NetworkConfigBATScripts.ps1
+    ç‰ˆæœ¬: 1.4
+   !é‡è¦
+    åœ¨powershellçª—å£å…ˆæ‰§è¡Œ 
+    Set-ExecutionPolicy Bypass -Scope Process -Force 
+    å†è¿è¡Œæ­¤è„šæœ¬
+    ä¾èµ–powershellï¼Œåœ¨win10ã€win11æµ‹è¯•å¯ç”¨ã€‚
 #>
 
-# ÅäÖÃ²ÎÊı
+# é…ç½®å‚æ•°
 $outputFolder = "C:\NetworkConfigBATScripts"
-$subnetMask = "255.255.255.0"
-$ipv6PrefixLength = "96"  # ÓëÊ¾Àı±£³ÖÒ»ÖÂ
+$subnetMask = "255.255.255.0" #IPv4æ©ç 
+$ipv6PrefixLength = "96"  # IPv6å‰ç¼€
 $defaultGatewayIPv4 = "192.168.2.1"
-$defaultGatewayIPv6 = "FE80::D238"  # ÓëÊ¾Àı±£³ÖÒ»ÖÂ
-$dnsServersIPv4 = @("114.114.114.114", "192.168.6.6")
-$dnsServersIPv6 = @("2400:3200::1", "fd0a::6")
-$testServer = "aliyun.com"  # ²âÊÔÁ¬Í¨ĞÔµÄ·şÎñÆ÷
+$defaultGatewayIPv6 = "FE80::D238"  # IPv6ç½‘å…³
+$dnsServersIPv4 = @("114.114.114.114", "192.168.6.6")  #IPv4 DNS
+$dnsServersIPv6 = @("2400:3200::1", "fd0a::6") #IPv6 DNS
+$testServer = "aliyun.com"  # æµ‹è¯•è¿é€šæ€§çš„æœåŠ¡å™¨
 
-# ¶¨ÒåPCÁĞ±í
+# å®šä¹‰PCåˆ—è¡¨ï¼Œæˆ‘è‡ªå·±ä½¿ç”¨excelç”ŸæˆIPä¿¡æ¯ç²˜è´´è¿‡æ¥è¿è¡Œï¼›
+# å› ä¸ºæˆ‘çš„éœ€æ±‚æ˜¯ipv4å’Œipv6ä¸€ä¸€å¯¹åº”ï¼Œä¸”ä¸å…·å¤‡å¯ç®€å•å¤ç”¨çš„è§„å¾‹ï¼Œæ‰€ä»¥ä½¿ç”¨æ­¤æ–¹æ³•ã€‚
 $pcList = @(
     @{ IPv4 = "192.168.2.10"; IPv6 = "240E:638::1031:3" }
     @{ IPv4 = "192.168.2.11"; IPv6 = "240E:638::1031:4" }
     @{ IPv4 = "192.168.2.12"; IPv6 = "240E:638::1031:5" }
+    #æ ¹æ®è‡ªå·±çš„éœ€æ±‚å¢åŠ IP
 )
 
-# ´´½¨Êä³öÄ¿Â¼
+# åˆ›å»ºè¾“å‡ºç›®å½•
 if (-not (Test-Path $outputFolder)) {
     New-Item -ItemType Directory $outputFolder | Out-Null
 }
@@ -39,101 +44,102 @@ foreach ($pc in $pcList) {
     $scriptPath = "$outputFolder\$ipv4.bat"
     $currentTime = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
 
-    # Éú³ÉBAT½Å±¾ÄÚÈİ
+    # ç”ŸæˆBATè„šæœ¬å†…å®¹
     $batContent = @"
 @echo off
-:: WindowsÍøÂç¾²Ì¬ÅäÖÃ½Å±¾ - $ipv4
-:: Éú³ÉÊ±¼ä: $currentTime
-:: ĞèÒªÒÔ¹ÜÀíÔ±Éí·İÔËĞĞ´Ë½Å±¾
+:: Windowsç½‘ç»œé™æ€é…ç½®è„šæœ¬ - $ipv4
+:: ç”Ÿæˆæ—¶é—´: $currentTime
+:: éœ€è¦ä»¥ç®¡ç†å‘˜èº«ä»½è¿è¡Œæ­¤è„šæœ¬
 
-:: »ñÈ¡¹ÜÀíÔ±È¨ÏŞ
+:: è·å–ç®¡ç†å‘˜æƒé™
 %1 mshta vbscript:CreateObject("Shell.Application").ShellExecute("cmd.exe","/c %~s0 ::","","runas",1)(window.close)&&exit cd /d "%~dp0"
 
-:: ÖÇÄÜ¼ì²â»î¶¯ÎïÀíÍø¿¨
-echo ÕıÔÚ¼ì²â»î¶¯ÍøÂç½Ó¿Ú...
+:: æ™ºèƒ½æ£€æµ‹æ´»åŠ¨ç‰©ç†ç½‘å¡
+echo æ­£åœ¨æ£€æµ‹æ´»åŠ¨ç½‘ç»œæ¥å£...
 for /f "delims=" %%i in ('powershell -command "(Get-NetAdapter -Physical | Where-Object { `$_.Status -eq 'Up' -and `$_.Name -notlike '*Loopback*' } | Select-Object -First 1).Name"') do (
     set "interfaceName=%%i"
 )
 
 if "%interfaceName%"=="" (
-    echo ´íÎó: Î´ÕÒµ½»î¶¯µÄÎïÀíÍøÂçÊÊÅäÆ÷
+    echo é”™è¯¯: æœªæ‰¾åˆ°æ´»åŠ¨çš„ç‰©ç†ç½‘ç»œé€‚é…å™¨
     pause
     exit /b 1
 )
 
-echo ÒÑÑ¡ÔñÍøÂç½Ó¿Ú: "%interfaceName%"
+echo å·²é€‰æ‹©ç½‘ç»œæ¥å£: "%interfaceName%"
 
-:: ÏÔÊ¾µ±Ç°ÅäÖÃ
-echo [µ±Ç°ÅäÖÃ]
+:: æ˜¾ç¤ºå½“å‰é…ç½®
+echo [å½“å‰é…ç½®]
 ipconfig | findstr /i "IPv4 IPv6"
 echo.
 
-:: ÅäÖÃIPv4µØÖ·
-echo ÕıÔÚÅäÖÃIPv4µØÖ·: $ipv4
+:: é…ç½®IPv4åœ°å€
+echo æ­£åœ¨é…ç½®IPv4åœ°å€: $ipv4
 netsh interface ipv4 set address "%interfaceName%" static $ipv4 $subnetMask $defaultGatewayIPv4 1
 IF %ERRORLEVEL% NEQ 0 (
-    echo ´íÎó: ÅäÖÃIPv4µØÖ·Ê§°Ü
+    echo é”™è¯¯: é…ç½®IPv4åœ°å€å¤±è´¥
     pause
     exit /b 1
 )
 
-:: ÅäÖÃIPv6µØÖ·
-echo ÕıÔÚÅäÖÃIPv6µØÖ·: $ipv6
+:: é…ç½®IPv6åœ°å€
+echo æ­£åœ¨é…ç½®IPv6åœ°å€: $ipv6
 netsh interface ipv6 set address "%interfaceName%" $ipv6/$ipv6PrefixLength
 IF %ERRORLEVEL% NEQ 0 (
-    echo ´íÎó: ÅäÖÃIPv6µØÖ·Ê§°Ü
+    echo é”™è¯¯: é…ç½®IPv6åœ°å€å¤±è´¥
     pause
     exit /b 1
 )
 
-:: ÅäÖÃIPv6Íø¹Ø£¨Ê¹ÓÃPowerShell£©
-echo ÕıÔÚÅäÖÃIPv6Íø¹Ø: $defaultGatewayIPv6
-powershell -Command "$interface = Get-NetAdapter -Name '%interfaceName%' -ErrorAction SilentlyContinue; if ($interface) { try { Remove-NetRoute -DestinationPrefix '::/0' -InterfaceAlias $interface.Name -Confirm:`$false -ErrorAction SilentlyContinue; New-NetRoute -InterfaceAlias $interface.Name -DestinationPrefix '::/0' -NextHop '$defaultGatewayIPv6' -ErrorAction Stop; Write-Host 'IPv6Íø¹ØÅäÖÃ³É¹¦!' -ForegroundColor Green } catch { Write-Host 'ÅäÖÃÊ§°Ü: ' + `$_.Exception.Message -ForegroundColor Red } } else { Write-Host 'Î´ÕÒµ½Íø¿¨: %interfaceName%!' -ForegroundColor Red }"
+:: é…ç½®IPv6ç½‘å…³ï¼ˆä½¿ç”¨PowerShellï¼‰
+echo æ­£åœ¨é…ç½®IPv6ç½‘å…³: $defaultGatewayIPv6
+powershell -Command "$interface = Get-NetAdapter -Name '%interfaceName%' -ErrorAction SilentlyContinue; if ($interface) { try { Remove-NetRoute -DestinationPrefix '::/0' -InterfaceAlias $interface.Name -Confirm:`$false -ErrorAction SilentlyContinue; New-NetRoute -InterfaceAlias $interface.Name -DestinationPrefix '::/0' -NextHop '$defaultGatewayIPv6' -ErrorAction Stop; Write-Host 'IPv6ç½‘å…³é…ç½®æˆåŠŸ!' -ForegroundColor Green } catch { Write-Host 'é…ç½®å¤±è´¥: ' + `$_.Exception.Message -ForegroundColor Red } } else { Write-Host 'æœªæ‰¾åˆ°ç½‘å¡: %interfaceName%!' -ForegroundColor Red }"
 
-:: ÅäÖÃDNS·şÎñÆ÷
-echo ÕıÔÚÅäÖÃDNS·şÎñÆ÷...
-echo ÉèÖÃIPv4 DNS: $($dnsServersIPv4[0]) ºÍ $($dnsServersIPv4[1])
+:: é…ç½®DNSæœåŠ¡å™¨
+echo æ­£åœ¨é…ç½®DNSæœåŠ¡å™¨...
+echo è®¾ç½®IPv4 DNS: $($dnsServersIPv4[0]) å’Œ $($dnsServersIPv4[1])
 netsh interface ipv4 set dns "%interfaceName%" static $($dnsServersIPv4[0]) primary >nul
 netsh interface ipv4 add dns "%interfaceName%" $($dnsServersIPv4[1]) index=2 >nul 
 
-echo ÉèÖÃIPv6 DNS: $($dnsServersIPv6[0]) ºÍ $($dnsServersIPv6[1])
+echo è®¾ç½®IPv6 DNS: $($dnsServersIPv6[0]) å’Œ $($dnsServersIPv6[1])
 netsh interface ipv6 set dns "%interfaceName%" static $($dnsServersIPv6[0]) primary >nul
 netsh interface ipv6 add dns "%interfaceName%" $($dnsServersIPv6[1]) index=2 >nul 
 
-:: ÏÔÊ¾ÅäÖÃ½á¹û
+:: æ˜¾ç¤ºé…ç½®ç»“æœ
 echo.
-echo [ĞÂÅäÖÃ]
+echo [æ–°é…ç½®]
 ipconfig /all | findstr /i "IPv4 IPv6 Subnet Default Gateway DNS Servers"
 
 echo.
 
-echo µÈ´ıÍø¿¨Æô¶¯
+echo é…ç½®å®Œæˆï¼Œç­‰å¾…ç½‘å¡å“åº”
 timeout /t 6 /nobreak 
 
-:: ²âÊÔÍøÂçÁ¬½Ó
+:: æµ‹è¯•ç½‘ç»œè¿æ¥
 echo.
-echo ÕıÔÚ²âÊÔÍøÂçÁ¬½Ó...
+echo æ­£åœ¨æµ‹è¯•ç½‘ç»œè¿æ¥...
 ping -4 -n 2 $testServer >nul && (
-    echo IPv4 ·şÎñÆ÷ $testServer ¿É´ï
+    echo IPv4 æœåŠ¡å™¨ $testServer å¯è¾¾
 ) || (
-    echo ¾¯¸æ: IPv4 ·şÎñÆ÷ $testServer ²»¿É´ï
+    echo è­¦å‘Š: IPv4 æœåŠ¡å™¨ $testServer ä¸å¯è¾¾
 )
 
 ping -6 -n 2 $testServer >nul && (
-    echo IPv6 ·şÎñÆ÷ $testServer ¿É´ï
+    echo IPv6 æœåŠ¡å™¨ $testServer å¯è¾¾
 ) || (
-    echo ¾¯¸æ: IPv6 ·şÎñÆ÷ $testServer ²»¿É´ï
+    echo è­¦å‘Š: IPv6 æœåŠ¡å™¨ $testServer ä¸å¯è¾¾
 )
 
 echo.
-echo ÍøÂçÅäÖÃÍê³É!´ò¿ªÏµÍ³ÍøÂçÉèÖÃ¿ÉÊÓ»¯¼ì²éÅäÖÃ£¡
+echo æ‰“å¼€ç³»ç»Ÿç½‘ç»œè®¾ç½®å¯è§†åŒ–æ£€æŸ¥é…ç½®ï¼
 ncpa.cpl
 pause
 "@
 
-    # ÒÔANSI±àÂë±£´æÎÄ¼ş
+    # ä»¥ANSIç¼–ç ä¿å­˜æ–‡ä»¶
     $batContent | Out-File $scriptPath -Encoding Default
-    Write-Host "ÒÑÉú³É: $scriptPath"
+    Write-Host "å·²ç”Ÿæˆ: $scriptPath"
 }
 
-Write-Host "`n½Å±¾Éú³ÉÍê³É£¬ÇëÒÔ¹ÜÀíÔ±Éí·İÔËĞĞÉú³ÉµÄBATÎÄ¼ş" -ForegroundColor Green
+Write-Host "`nè„šæœ¬ç”Ÿæˆå®Œæˆï¼Œè¯·ä»¥ç®¡ç†å‘˜èº«ä»½è¿è¡Œç”Ÿæˆçš„BATæ–‡ä»¶" -ForegroundColor Green
+
