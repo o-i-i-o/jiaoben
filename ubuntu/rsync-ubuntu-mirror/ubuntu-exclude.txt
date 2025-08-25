@@ -1,0 +1,52 @@
+#Ubuntu 18.04 LTS Bionic Beaver
+dists/bionic-backports/
+dists/bionic-proposed/
+dists/bionic-security/
+dists/bionic-updates/
+dists/bionic/
+
+#Ubuntu 20.04 LTS Focal Fossa
+dists/focal-backports/
+dists/focal-proposed/
+dists/focal-security/
+dists/focal-updates/
+dists/focal/
+
+#Ubuntu 22.04 Jammy Jellyfish
+dists/jammy-backports/
+dists/jammy-proposed/
+dists/jammy-security/
+dists/jammy-updates/
+dists/jammy/
+
+#Ubuntu 24.10 Oracular Oriole
+dists/oracular-backports/
+dists/oracular-proposed/
+dists/oracular-security/
+dists/oracular-updates/
+dists/oracular/
+
+#Ubuntu 14.04 LTS Trusty Tahr
+dists/trusty-backports/
+dists/trusty-proposed/
+dists/trusty-security/
+dists/trusty-updates/
+dists/trusty/
+
+#Ubuntu 16.04 LTS Xenial Xerus
+dists/xenial-backports/
+dists/xenial-proposed/
+dists/xenial-security/
+dists/xenial-updates/
+dists/xenial/
+
+#Ubuntu 开发者版 devel
+dists/devel*/
+
+
+#排除不常用架构
+*-mips*.deb
+
+*-arm*.deb
+*-powerpc64-*.deb
+*_i386.deb
