@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo 手动配置子网IPv6地址
+LIPv6="2001:db8:b84b:2::/112"
+echo "配置的子网ipv6地址：$LIPv6"
 # 定义日志函数
 log_info() {
     echo "[INFO] $1"
@@ -10,6 +13,7 @@ if [ "$(id -u)" -ne 0 ]; then
     log_info "请使用 root 权限运行此脚本"
     exit 1
 fi
+
 
 log_info "OpenVPN AS IPv6 自动配置脚本启动"
 
@@ -87,7 +91,7 @@ cd /usr/local/openvpn_as/scripts/ || exit
 # 配置 OpenVPN AS IPv6 参数
 ./sacli --key "vpn.routing6.enable" --value "true" ConfigPut
 ./sacli --key "vpn.client.routing6.reroute_gw" --value "true" ConfigPut
-./sacli --key "vpn.server.daemon.vpn_network6.0" --value "2001:db8:b84b:2::/112" ConfigPut
+./sacli --key "vpn.server.daemon.vpn_network6.0" --value "${LIPv6}" ConfigPut
 
 # 注意：这里使用用户选择的接口和 IPv6 地址
 ./sacli --key "vpn.server.routing6.snat_source.0" --value "$selected_interface:$selected_ipv6" ConfigPut
