@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo 手动配置子网IPv6地址
+echo 手动编辑脚本配置子网IPv6地址
 LIPv6="2001:db8:b84b:2::/112"
 echo "配置的子网ipv6地址：$LIPv6"
 # 定义日志函数
