@@ -136,9 +136,9 @@ check_compile_deps
     # 编译配置
     cd "${NGINX_SRC}" || { echo -e "${red}❌ 进入Nginx源码目录失败${nc}"; exit 1; }
     echo -e "${yellow}🔧 执行configure配置 ${nc}"
-
+date=$(date +%Y%m%d)
 ./configure \
---with-cc-opt='-g -O2 -Werror=implicit-function-declaration -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -ffile-prefix-map=/build/nginx-8acHtg/nginx-1.29.4=. -flto=auto -ffat-lto-objects -fstack-protector-strong -fstack-clash-protection -Wformat -Werror=format-security -fcf-protection -fdebug-prefix-map=/build/nginx-8acHtg/nginx-1.29.4=/usr/src/nginx-1.29.4-6ubuntu1 -fPIC -Wdate-time -D_FORTIFY_SOURCE=3' \
+--with-cc-opt='-g -O2 -Werror=implicit-function-declaration -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -ffile-prefix-map=/build/nginx-8acHtg/nginx-$date=. -flto=auto -ffat-lto-objects -fstack-protector-strong -fstack-clash-protection -Wformat -Werror=format-security -fcf-protection -fdebug-prefix-map=/build/nginx-8acHtg/nginx-$date=/usr/src/nginx-$date-ubuntu1 -fPIC -Wdate-time -D_FORTIFY_SOURCE=3' \
 --with-ld-opt='-Wl,-Bsymbolic-functions -flto=auto -ffat-lto-objects -Wl,-z,relro -Wl,-z,now -fPIC' \
 --prefix=/usr/share/nginx \
 --sbin-path=/usr/sbin/nginx \
